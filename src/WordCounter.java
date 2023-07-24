@@ -1,19 +1,27 @@
 import java.io.*;
-import java.util.Hashtable;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class WordCounter {
     private String inFile;
     private static String testString = "some test string, do some test test";
-    private Hashtable words = new Hashtable();
+    private TreeMap <String, Integer> words = new TreeMap();
 
-    public Hashtable getWords() {
+    public TreeMap <String, Integer> getWords() {
         return this.words;
     }
 
     public WordCounter(String inFile) {
         this.inFile = inFile;
     }
+
+    public Set<SortValue> getSet(){
+        Set <SortValue> set = new TreeSet<>();
+        for(var item : words.entrySet()){
+            set.add(new SortValue(item.getKey(), item.getValue()));
+        }
+        return set;
+    }
+
 
     public void countWords() throws IOException {
         Object reader;
@@ -26,15 +34,15 @@ public class WordCounter {
         BufferedReader br = new BufferedReader((Reader)reader);
 
         for(String line = br.readLine(); line != null; line = br.readLine()) {
-            StringTokenizer st = new StringTokenizer(line, " ,./\\;:!?");
+            StringTokenizer st = new StringTokenizer(line, " ,./\\;:!?<>\"()-$*|�");
 
             while(st.hasMoreTokens()) {
                 String token = st.nextToken();
-                if (!this.words.containsKey(token)) {
+                    if (!this.words.containsKey(token)) {
                     this.words.put(token, 1);
                 } else {
-                    Object val = this.words.get(token);
-                    int n = (Integer)val;
+                    //Object val = this.words.get(token);
+                    int n = (Integer)this.words.get(token);
                     ++n;
                     this.words.put(token, n);
                 }
